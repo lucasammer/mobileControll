@@ -3,7 +3,8 @@ var ip = require('ip');
 const notifier = require('node-notifier');
 const open = require('open');                            // Package for opening URL's
 const fs = require("fs");   
-const path = require("path")  
+const path = require("path") 
+var crypto = require('crypto'); 
 
 const app = new express();                               // Initialises express
 
@@ -64,6 +65,12 @@ app.get('/api', async(req, res) => {
         }
        }else{
         res.send(JSON.parse('{"error":"missing/invalid arguements"}'));
+       }
+    break;
+
+    case "hash":
+       if(req.query.val!=""){
+        res.send(hash(req.query.val))
        }
     break;
 
@@ -147,4 +154,8 @@ function base64ToObject(str){
   let bin = buff.toString('utf-8');
   let obj = convertBinaryToObject(bin);
   return obj;
+}
+
+const hash = (val) => {
+  return crypto.createHash('md5').update(val).digest('hex')
 }
